@@ -9,6 +9,7 @@ export function Sketchbook() {
   const addItem = () => {
     setItems([
       {
+        id: _.uniqueId(),
         title: "New Item",
         amount: 0,
         unit: "",
@@ -17,13 +18,17 @@ export function Sketchbook() {
       ...items,
     ]);
   };
+  const updateItem = (id: string) => (item: SingleDiaryItem) => {
+    setItems((items) => items.map((i) => (i.id === id ? item : i)));
+  };
+
   return (
     <Flex flexDirection={"column"}>
       <Center>
         <CircleAddIcon dark onClick={addItem} />
       </Center>
-      {items.map(({ amount, unit, title, target }) => (
-        <DiaryItem amount={amount} unit={unit} title={title} target={target} />
+      {items.map((item) => (
+        <DiaryItem {...item} key={item.id} updateItem={updateItem(item.id)} />
       ))}
     </Flex>
   );
